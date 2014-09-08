@@ -4,6 +4,59 @@
     <title>CHS CycleBot</title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/weather-icons.min.css" />
+    <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript">
+    var weather_update_moment = null;
+    function onSecond() {
+        $('.date-time').text(moment().format('dddd, MMMM Do, YYYY - h:mm A'));
+        if(weather_update_moment) $('.weather-update').text('Last Updated: ' + weather_update_moment.fromNow());
+        setTimeout(onSecond, 1 * 1000);
+    }
+    function kelvinToFarenheit(k, round) {
+        return Math.round(Math.pow(10, round) * (((k-273.15)*1.8) + 32.0)) / Math.pow(10, round);
+    }
+    function degreesToCompass(num){
+        adjusted_d = Math.round((num/22.5)+.5)
+        d = ["N","NNE","NE","ENE","E","ESE", "SE", "SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"]
+        return d[(adjusted_d % 16)]
+    }
+    function metersPerSecondToMilesPerHour(speed, round) {
+        return Math.round(Math.pow(10, round) * speed * 2.23694)/Math.pow(10, round);
+    }
+    function updateWeather() {
+        $.ajax({
+            'url': 'http://api.openweathermap.org/data/2.5/weather',
+            'data': { 'q': 'Carmel,NY' },
+            'dataType': 'json'
+        }).done(function(response) {
+            $('.weather').html("Temperature: " + kelvinToFarenheit(response.main.temp, 2) + "&#xb0; F<br />" +
+                               "Relative Humidity: " + response.main.humidity + "% <br />" +
+                               "Wind Speed: " + metersPerSecondToMilesPerHour(response.wind.speed, 1) + " MPH " + 
+                               degreesToCompass(response.wind.deg));
+            weather_update_moment = moment();
+            $('.weather-update').text('Last Updated: ' + weather_update_moment.fromNow());
+        }).always(function() {
+            setTimeout(updateWeather, 10 * 60 * 1000);
+        });
+    }
+    function updateCycle() {
+        $.ajax({
+            'url': 'https://secure.insinger.me/cycle.json',
+            'dataType': 'json'
+        }).done(function(response) {
+            if(response.date == moment().format('MM-DD-YYYY')) $('.cycle').text(response.cycle);
+            else $('.cycle').text('N/A');
+        }).always(function() {
+            setTimeout(updateCycle, 10 * 60 * 1000);
+        });
+    }
+    $(function() {
+        onSecond();
+        updateWeather();
+        updateCycle();
+    });
+    </script>
     <style type="text/css">
     body {
         background: -webkit-linear-gradient(bottom, #16222A 10%, #3A6073 90%); /* Chrome 10+, Saf5.1+ */
@@ -27,14 +80,21 @@
         margin:10px;
         text-align: center;
     }
+    .weather {
+        font-size: 36pt;
+    }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <h1 style="text-align: center; font-size: 48pt;">@CHSCycleBot</h1>
+        <h1 style="text-align: center; font-size: 24pt;" class="date-time">Monday, September 8th - 9:49 AM</h1>
         <div class="row">
             <div class="col-md-8">
-                <h2>Weather</h2>
+                <h2><span style="float: right; font-size:10pt; color: #CFCFCF;" class="weather-update">Last Updated: N/A</span>Weather<span style="clear:both;"></span></h2>
+                <div class="weather">
+                </div>
+                <!--
                 <ul class="weather-list">
                     <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
                     <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
@@ -46,16 +106,11 @@
                     <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
                 </ul>
                 <br style="clear: both;" />
+                -->
             </div>
             <div class="col-md-4" style="text-align: center;">
                 <h2 style="margin-bottom: 0px;">Cycle</h2>
-                <h1 style="font-size: 102pt; margin-top: 0px;">5</h1>
-                <hr />
-                <h2 style="margin-bottom: 0px;">Time</h2>
-                <h1 style="font-size: 102pt; margin-top: 0px;">12:30</h1>
-                <hr />
-                <h2 style="margin-bottom: 0px;">Date</h2>
-                <h1 style="font-size: 35pt; margin-top: 0px;">Monday<br/>September 8</h1>
+                <h1 style="font-size: 102pt; margin-top: 0px;" class="cycle">N/A</h1>
             </div>
         </div>
     </div>
