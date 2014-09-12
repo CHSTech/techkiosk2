@@ -8,7 +8,7 @@
     <script type="text/javascript" src="js/moment.js"></script>
     <script type="text/javascript">
     var weather_update_moment = null;
-    var end_of_school = moment('2014-06-21', 'YYYY-MM-DD');
+    var end_of_school = moment('2015-06-21', 'YYYY-MM-DD');
     function onSecond() {
         $('.date-time').text(moment().format('dddd, MMMM Do, YYYY - h:mm A'));
         if(weather_update_moment) $('.weather-update').text('Last Updated: ' + weather_update_moment.fromNow());
