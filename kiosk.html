@@ -8,9 +8,11 @@
     <script type="text/javascript" src="js/moment.js"></script>
     <script type="text/javascript">
     var weather_update_moment = null;
+    var end_of_school = moment('2014-06-21', 'YYYY-MM-DD');
     function onSecond() {
         $('.date-time').text(moment().format('dddd, MMMM Do, YYYY - h:mm A'));
         if(weather_update_moment) $('.weather-update').text('Last Updated: ' + weather_update_moment.fromNow());
+        $('.remaining-time').text(end_of_school.fromNow())
         setTimeout(onSecond, 1 * 1000);
     }
     function kelvinToFarenheit(k, round) {
@@ -89,6 +91,7 @@
     <div class="container-fluid">
         <h1 style="text-align: center; font-size: 48pt;font-weight:bold;">@CHSCycleBot</h1>
         <h1 style="text-align: center; font-size: 24pt;" class="date-time">Monday, September 8th - 9:49 AM</h1>
+        <h1 style="text-align: center; font-size: 24pt;" class="remaining-time">N/A days left</h1>
         <div class="row">
             <div style="text-align: center; float: right; margin-left: 60px; margin-right: 50px;">
                 <h2 style="margin-bottom: 0px;">Cycle</h2>
