@@ -12,7 +12,7 @@
     function onSecond() {
         $('.date-time').text(moment().format('dddd, MMMM Do, YYYY - h:mm A'));
         if(weather_update_moment) $('.weather-update').text('Last Updated: ' + weather_update_moment.fromNow());
-        $('.remaining-time').text(end_of_school.fromNow())
+        $('.remaining-time').text('the end is ' + end_of_school.fromNow())
         setTimeout(onSecond, 1 * 1000);
     }
     function kelvinToFarenheit(k, round) {
