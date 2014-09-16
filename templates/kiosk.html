@@ -58,7 +58,7 @@
         }).done(function(response){
             var percentage = 100.0 * response.totalShrUsage/response.allowance;
             $('#phinet-status').css('width', percentage + '%');
-
+            $('#phinet-status').text('next cycle ' + moment(response.cycleEndDt, 'MM/DD/YYYY').fromNow());
         }).error(function() {
             $('#phinet-status').css('width', '0%');
         }).always(function() {
