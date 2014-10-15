@@ -32,7 +32,7 @@
         }).done(function(response) {
             $('.weather').html("Temperature: " + kelvinToFarenheit(response.main.temp, 2) + "&#xb0; F<br />" +
                                "Relative Humidity: " + response.main.humidity + "% <br />" +
-                               "Wind Speed: " + metersPerSecondToMilesPerHour(response.wind.speed, 1) + " MPH " + 
+                               "Wind Speed: " + metersPerSecondToMilesPerHour(response.wind.speed, 1) + " MPH " +
                                degreesToCompass(response.wind.deg));
             weather_update_moment = moment();
             $('.weather-update').text('Last Updated: ' + weather_update_moment.fromNow());
@@ -74,13 +74,18 @@
     </script>
     <style type="text/css">
     body {
-        background: -webkit-linear-gradient(bottom, #16222A 10%, #3A6073 90%); /* Chrome 10+, Saf5.1+ */
-        background:    -moz-linear-gradient(bottom, #16222A 10%, #3A6073 90%); /* FF3.6+ */
-        background:     -ms-linear-gradient(bottom, #16222A 10%, #3A6073 90%); /* IE10 */
-        background:      -o-linear-gradient(bottom, #16222A 10%, #3A6073 90%); /* Opera 11.10+ */
-        background:         linear-gradient(bottom, #16222A 10%, #3A6073 90%); /* W3C */
+        /*background: -webkit-linear-gradient(bottom, #16222A 10%, #3A6073 90%);
+        background:    -moz-linear-gradient(bottom, #16222A 10%, #3A6073 90%);
+        background:     -ms-linear-gradient(bottom, #16222A 10%, #3A6073 90%);
+        background:      -o-linear-gradient(bottom, #16222A 10%, #3A6073 90%);
+        background:         linear-gradient(bottom, #16222A 10%, #3A6073 90%);
+        background-repeat: no-repeat;
+        background-attachment: fixed;*/
         background-repeat: no-repeat;
         background-attachment: fixed;
+        background-size: 100% 100%;
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("http://10.0.0.42:8081");
+
         color: white;
     }
     ul.weather-list {
@@ -113,19 +118,6 @@
                 <h2><span style="float: right; font-size:10pt; color: #CFCFCF;" class="weather-update">Last Updated: N/A</span>Weather<span style="clear:both;"></span></h2>
                 <div class="weather">
                 </div>
-                <!--
-                <ul class="weather-list">
-                    <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
-                    <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
-                    <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
-                    <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
-                    <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
-                    <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
-                    <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
-                    <li><i class="wi wi-day-sunny" style="font-size: 38pt;margin-bottom:5px; color:yellow;"></i><br />9/8</li>
-                </ul>
-                <br style="clear: both;" />
-                -->
             </div>
         </div>
 
