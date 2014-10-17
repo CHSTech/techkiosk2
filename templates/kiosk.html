@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/weather-icons.min.css') }}" />
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.11.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/moment.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/eventemitter2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mjpegcanvas.min.js') }}"></script>
     <script type="text/javascript">
     var weather_update_moment = null;
     function onSecond() {
@@ -65,28 +67,42 @@
             setTimeout(updateDataUsage, 60 * 1000);
         });
     }
+    function updateCamera() {
+        $('#camera').css('background-image', 'url(http://10.0.0.42:8081/)');
+        setTimeout(updateCamera, 1000);
+    }
     $(function() {
         onSecond();
         updateWeather();
         updateCycle();
         updateDataUsage();
+        updateCamera();
     });
     </script>
     <style type="text/css">
     body {
-        /*background: -webkit-linear-gradient(bottom, #16222A 10%, #3A6073 90%);
+        background: -webkit-linear-gradient(bottom, #16222A 10%, #3A6073 90%);
         background:    -moz-linear-gradient(bottom, #16222A 10%, #3A6073 90%);
         background:     -ms-linear-gradient(bottom, #16222A 10%, #3A6073 90%);
         background:      -o-linear-gradient(bottom, #16222A 10%, #3A6073 90%);
         background:         linear-gradient(bottom, #16222A 10%, #3A6073 90%);
         background-repeat: no-repeat;
-        background-attachment: fixed;*/
+        background-attachment: fixed;
+        background-size: 100% 100%;
+        /*background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("http://10.0.0.42:8081");*/
+
+        color: white;
+    }
+    #camera {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        height: 100%;
+        width: 100%;
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: 100% 100%;
-        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("http://10.0.0.42:8081");
-
-        color: white;
     }
     ul.weather-list {
         font-size: 18pt; list-style-type: none;
@@ -106,6 +122,7 @@
     </style>
 </head>
 <body>
+    <div id="camera"></div>
     <div class="container-fluid">
         <h1 style="text-align: center; font-size: 48pt;font-weight:bold;">@CHSCycleBot</h1>
         <h1 style="text-align: center; font-size: 24pt;" class="date-time">Monday, September 8th - 9:49 AM</h1>
