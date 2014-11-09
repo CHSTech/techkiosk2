@@ -6,8 +6,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/weather-icons.min.css') }}" />
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.11.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/moment.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/eventemitter2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/mjpegcanvas.min.js') }}"></script>
     <script type="text/javascript">
     var weather_update_moment = null;
     function onSecond() {
@@ -67,15 +65,44 @@
             setTimeout(updateDataUsage, 60 * 1000);
         });
     }
-    function updateCamera() {
-        $('#camera').css('background-image', 'url(http://10.0.0.42:8081/)');
+    var door_data = null;
+    function updateDoorStatus() {
+        if(door_data && moment().diff(door_data.time) < 30*1000) {
+            if(Math.round(moment().diff(door_data.time)/500.0) % 2 == 0) {
+                $('.door-alert').removeClass('alert-danger').removeClass('alert-success').addClass('alert-warning');
+            } else {
+                if(door_data.access_granted) $('.door-alert').removeClass('alert-danger').addClass('alert-success').removeClass('alert-warning');
+                else $('.door-alert').removeClass('alert-success').addClass('alert-danger').removeClass('alert-warning');
+            }
+            $('.door-alert')
+            .html('<i class="glyphicon glyphicon-lock"></i> Access ' + (door_data.access_granted ? 'Granted' : 'Denied') +
+                  ' (' + Math.round(moment().diff(door_data.time)/1000.0) + 's ago)')
+            .show();
+        } else {
+            $('.door-alert').hide();
+            door_data = null;
+        }
+        setTimeout(updateDoorStatus, 500);
+    }
+    function connectToDoorController() {
+        var ws = new WebSocket("ws://10.0.0.11:8080/notify");
+        ws.onmessage = function (evt) {
+            var data = JSON.parse(evt.data);
+            data.time = moment(data.time);
+            door_data = data;
+        };
+        ws.onclose = function()
+        {
+            setTimeout(connectToDoorController, 5000);
+        };
     }
     $(function() {
         onSecond();
         updateWeather();
         updateCycle();
-        updateDataUsage();
-        updateCamera();
+        //updateDataUsage();
+        connectToDoorController();
+        updateDoorStatus();
     });
     </script>
     <style type="text/css">
@@ -121,7 +148,6 @@
     </style>
 </head>
 <body>
-    <div id="camera"></div>
     <div class="container-fluid">
         <h1 style="text-align: center; font-size: 48pt;font-weight:bold;">@CHSCycleBot</h1>
         <h1 style="text-align: center; font-size: 24pt;" class="date-time">Monday, September 8th - 9:49 AM</h1>
@@ -136,6 +162,8 @@
                 </div>
             </div>
         </div>
+
+        <div class="alert door-alert" role="alert" style="text-align:center; font-size:24px; display:none;"></div>
 
         <div class="data-usage" style="display: none;">
             <h2>PHINET Data Usage</h2>
