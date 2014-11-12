@@ -75,7 +75,7 @@
                 else $('.door-alert').removeClass('alert-success').addClass('alert-danger').removeClass('alert-warning');
             }
             $('.door-alert')
-            .html('<i class="glyphicon glyphicon-lock"></i> Access ' + (door_data.access_granted ? 'Granted' : 'Denied') +
+            .html('<i class="glyphicon glyphicon-lock"></i> Access ' + (door_data.access_granted ? 'Granted to ' + door_data.user + '' : 'Denied') +
                   ' (' + Math.round(moment().diff(door_data.time)/1000.0) + 's ago)')
             .show();
         } else {
